@@ -6,6 +6,9 @@ from .image_extractor import extract_text_from_image
 from .pdf_extractor import extract_text_from_pdf
 from django.core.files.storage import default_storage
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 import os
 
 def save_financial_data(extracted_text, extracted_data):
@@ -47,6 +50,33 @@ def save_financial_data(extracted_text, extracted_data):
 
     return financial_entry
 
+
+
+def register(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        email = request.POST['email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+
+        if password1 != password2:
+            messages.error(request, "Passwords do not match")
+            return render(request, 'finance/register.html')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken")
+            return render(request, 'finance/register.html')
+
+        user = User.objects.create_user(username=username, email=email, password=password1)
+        user.save()
+        messages.success(request, "Account created successfully. Please login.")
+        return redirect('login')
+
+    return render(request, 'finance/register.html')
+
+
+
+@login_required(login_url='login') 
 
 def home(request):
     if request.method == "POST":
@@ -106,6 +136,18 @@ def home(request):
             })
 
     return render(request, "finance/home.html")
+
+
+# About view
+def about(request):
+    return render(request, 'finance/about.html')  # Ensure this template exists
+
+
+# Contact view
+def contact(request):
+    return render(request, 'finance/contact.html')
+
+
 
 
 def incomplete_financial_data(request):
