@@ -1,0 +1,212 @@
+{% extends 'finance/base.html' %}
+{% load static %}
+
+{% block title %}Extract Financial Metrics{% endblock %}
+
+{% block content %} 
+
+<!-- Hero Section -->
+<section class="flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-6 bg-gray-100 w-full">
+    <!-- Text Content -->
+    <div class="md:w-1/2 text-center md:text-left">
+        <h1 class="text-5xl font-extrabold text-gray-900 leading-tight">
+            Empower Your <span class="text-red-500">Financial Future</span>
+        </h1>
+        <p class="mt-4 text-lg text-gray-600">
+            Get expert financial solutions tailored to your needs. We help you plan, invest, and grow securely.
+        </p>
+        <div class="mt-6 space-x-4">
+            <button class="px-6 py-3 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-all">
+                READ MORE
+            </button>
+            <button class="px-6 py-3 border border-blue-500 rounded-lg shadow-md hover:bg-blue-500 transition-all">
+                CONTACT US
+            </button>
+        </div>
+    </div>
+
+    <!-- Image -->
+    <div class="md:w-1/2 mt-8 md:mt-0">
+        <img src="{% static 'images/banner-img.png' %}" alt="Financial Illustration" class="w-full max-w-md md:max-w-lg">
+    </div>
+</section>
+
+
+
+
+
+
+
+<!-- Financial Data Extractor Section -->
+<section class="w-full mt-10 p-8 bg-white shadow-lg rounded-lg">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center">
+        Financial Data Extractor
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Left Column: Extraction Section -->
+        <div class="p-6 bg-gray-50 shadow-md rounded-lg">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Extract Financial Data <span class="text-red-500">;</span></h2>
+            <div class="w-16 h-1 bg-red-500 my-4"></div>
+
+            <!-- Tab Navigation -->
+            <div class="border-b border-gray-300 mb-6">
+                <nav class="flex space-x-4 text-center" id="financialTabs">
+                    <button class="tab-button px-6 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none active" data-tab="input">
+                        Input
+                    </button>
+                    <button class="tab-button px-6 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none" data-tab="pdf">
+                        PDF
+                    </button>
+                    <button class="tab-button px-6 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none" data-tab="image">
+                        Image
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="financialTabsContent">
+                <!-- Input Tab -->
+                <div class="tab-content block" id="input">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="financial_text" class="block text-gray-700 font-medium">Enter Financial Details:</label>
+                            <textarea class="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300" id="financial_text" name="financial_text" rows="8" placeholder="Enter financial details here..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition-all">
+                            Extract Data
+                        </button>
+            {% if error %}
+            <div class="bg-red-500 text-white p-3 rounded mb-4">
+                {{ error }}
+            </div>
+        {% endif %}
+
+                    </form>
+                </div>
+
+                <!-- PDF Tab -->
+                <div class="tab-content hidden" id="pdf">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="pdf_upload" class="block text-gray-700 font-medium">Upload PDF File:</label>
+                            <input type="file" class="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300" id="pdf_upload" name="pdf_upload" accept="application/pdf">
+                        </div>
+                        <button type="submit" class="w-full bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition-all">
+                            Extract Data
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Image Tab -->
+                <div class="tab-content hidden" id="image">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="image_upload" class="block text-gray-700 font-medium">Upload Image:</label>
+                            <input type="file" class="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300" id="image_upload" name="image_upload" accept="image/*">
+                        </div>
+                        <button type="submit" class="w-full bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition-all">
+                            Extract Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Description Section -->
+        <div class="p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">How It Works <span class="text-red-500">;</span></h2>
+            <div class="w-16 h-1 bg-red-500 my-4"></div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                This tool extracts financial data from different sources like text, PDFs, and images using AI-based analysis.
+            </p>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                <li><strong>Text Input:</strong> Manually enter financial details for data extraction.</li>
+                <li><strong>PDF Upload:</strong> Upload financial documents and extract structured financial data.</li>
+                <li><strong>Image Upload:</strong> Upload an image that contains written financial information. 
+                </li>
+            </ul>
+            <p class="mt-6 text-gray-600">
+                Once processed, the extracted financial data will be displayed in a structured format for easy review and analysis.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript for Tabs -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tabs = document.querySelectorAll(".tab-button");
+        const contents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function() {
+                tabs.forEach(t => t.classList.remove("border-blue-500", "text-gray-900", "font-semibold"));
+                tab.classList.add("border-blue-500", "text-gray-900", "font-semibold");
+
+                contents.forEach(content => content.classList.add("hidden"));
+                document.getElementById(tab.getAttribute("data-tab")).classList.remove("hidden");
+            });
+        });
+    });
+</script>
+
+
+
+
+<!-- Hero Section -->
+<section class="flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-6 w-full bg-white">
+    <!-- Left Content: Text -->
+    <div class="md:w-1/2 text-center md:text-left">
+        <h1 class="text-4xl font-extrabold text-gray-900 leading-tight">
+            Hello Business Man <span class="text-red-500">;</span>
+        </h1>
+        <div class="w-16 h-1 bg-red-500 my-4"></div>
+        <p class="mt-4 text-lg text-gray-600">
+            Welcome to FinTech Solutions, your trusted platform for extracting and analyzing financial data with cutting-edge AI technology.
+        </p>
+        <p class="mt-4 text-gray-700 leading-relaxed">
+            We provide AI-powered financial data extraction, making it easier for businesses and professionals to process and analyze complex financial documents.
+            Our tools ensure accuracy, efficiency, and real-time insights to help you make data-driven financial decisions.
+        </p>
+        
+        <p class="mt-4 text-gray-700 leading-relaxed">
+            The most crucial part of financial data extraction and analysis is eliminating barriers for professionals, businesses, and individuals who struggle to find accurate and accessible financial insights.
+        </p>
+        <p class="mt-6 text-gray-700 font-medium">
+            💰 Financial data should be transparent, easy to access, and insightful for better decision-making!
+        </p>
+        
+    </div>
+
+    <!-- Right Content: Image -->
+    <div class="md:w-1/2 mt-8 md:mt-0 flex justify-center">
+        <img src="{% static 'images/Sidebar.png' %}" alt="Developer Illustration" class="w-full max-w-md md:max-w-lg">
+    </div>
+</section>
+
+
+
+
+
+<div class="bg-white py-12">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-800">Get The Latest Updates</h2>
+      <p class="text-gray-500">Enter your email to subscribe for new updates and coupon announcements.</p>
+    </div>
+    <div class="flex justify-center">
+      <input
+        type="email"
+        placeholder="Enter Your Email"
+        class="px-4 py-2 border-2 border-blue-500 rounded-full text-gray-600 focus:outline-none focus:ring-2"
+      />
+      <button class="ml-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2">
+        SUBSCRIBE NOW
+      </button>
+    </div>
+  </div>
+
+{% endblock %}

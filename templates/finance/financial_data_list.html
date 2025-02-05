@@ -1,0 +1,44 @@
+{% extends 'finance/base.html' %}
+
+{% block title %}Extract Financial Metrics{% endblock %}
+
+{% block content %}
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Text Input</th>
+            <th>Tirada</th>
+            <th>Soo Iibsiga</th>
+            <th>Iska Iibinta</th>
+            <th>Kharashaadka</th>
+            <th>Dakhliga</th>
+            <th>Faa'iido</th>
+            <th>Faa'iido %</th>
+            <th>Khasaaro</th>
+            <th>Khasaaro %</th>
+            <th>Dakhliga Hadda</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in financial_data %}
+        <tr>
+            <td title="{{ data.text_input }}">
+                {{ data.text_input|truncatewords:4 }}  <!-- Show first 5 words -->
+            </td>
+            <td>{{ data.tirada }}</td>
+            <td>{{ data.qiimaha_soo_iibsiga }}</td>
+            <td>{{ data.qiimaha_iska_iibinta }}</td>
+            <td>{{ data.kharashaadka }}</td>
+            <td>{{ data.dakhliga }}</td>
+            <td>{{ data.faa_iido }}</td>
+            <td>{{ data.faa_iidada_percent }}</td>
+            <td>{{ data.khasaaro }}</td>
+            <td>{{ data.khasaaro_percent }}</td>
+            <td>{{ data.dakhliga_hadda }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

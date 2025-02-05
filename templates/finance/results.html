@@ -1,0 +1,94 @@
+{% extends 'finance/base.html' %}
+
+{% block title %}Extraction Results{% endblock %}
+
+{% block content %} 
+    <div class="container mx-auto mt-10 p-6 max-w-4xl bg-white shadow-lg rounded-lg">
+        <h1 class="text-center text-2xl font-bold mb-6">Extraction Results</h1>
+
+        <!-- Tabs Navigation -->
+        <div class="border-b border-gray-300">
+            <nav class="flex space-x-4" id="financialTabs" role="tablist">
+                <button class="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none focus:border-blue-500 active" id="status-tab" data-tab="status">Status</button>
+                <button class="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none focus:border-blue-500" id="revenue-tab" data-tab="revenue">Revenue</button>
+                <button class="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none focus:border-blue-500" id="expenses-tab" data-tab="expenses">Expenses</button>
+                <button class="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none focus:border-blue-500" id="buy-tab" data-tab="buy">Buy</button>
+                <button class="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent focus:outline-none focus:border-blue-500" id="sell-tab" data-tab="sell">Sell</button>
+            </nav>
+        </div>
+
+        <!-- Tabs Content -->
+        <div class="mt-6" id="financialTabsContent">
+            <div class="tab-content block" id="status">
+                <h2 class="text-xl font-semibold mb-4">Status</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% for key, value in financials.items %}
+                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h2 class="mt-6 text-xl font-semibold">Calculated Metrics</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% for key, value in metrics.items %}
+                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-content hidden" id="revenue">
+                <h2 class="text-xl font-semibold mb-4">Revenue</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% for key, value in financials.revenue.items %}
+                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-content hidden" id="expenses">
+                <h2 class="text-xl font-semibold mb-4">Expenses</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% if financials.kharashaadka %}
+                        <li class="py-2"><strong>{{ "kharashaadka"|capfirst }}:</strong> {{ financials.kharashaadka }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="tab-content hidden" id="buy">
+                <h2 class="text-xl font-semibold mb-4">Buy</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% for key, value in financials.buy.items %}
+                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-content hidden" id="sell">
+                <h2 class="text-xl font-semibold mb-4">Sell</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% for key, value in financials.sell.items %}
+                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <a href="{% url 'home' %}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Go Back</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tabs = document.querySelectorAll("[data-tab]");
+            const contents = document.querySelectorAll(".tab-content");
+            
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function() {
+                    tabs.forEach(t => t.classList.remove("border-blue-500", "text-gray-900"));
+                    tab.classList.add("border-blue-500", "text-gray-900");
+                    
+                    contents.forEach(content => content.classList.add("hidden"));
+                    document.getElementById(tab.getAttribute("data-tab")).classList.remove("hidden");
+                });
+            });
+        });
+    </script>
+{% endblock %}
