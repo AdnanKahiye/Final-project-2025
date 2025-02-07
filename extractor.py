@@ -133,6 +133,7 @@ def calculate_metrics(financials):
     khasaaradda = financials.get("khasaarada", None)
 
     results = {}
+    results['tirada']=tirada
 
     # Calculate profit from profit margin
     if faa_iidada and dakhliga:
@@ -144,13 +145,15 @@ def calculate_metrics(financials):
     if qiimaha_soo_iibsiga and qiimaha_iska_iibinta:
         results['kharashaadka'] =qiimaha_soo_iibsiga*tirada
         results['dakhliga'] =qiimaha_iska_iibinta*tirada
+        results['qiimaha_soo_iibsiga'] =qiimaha_soo_iibsiga
+        results['qiimaha_iska_iibinta'] =qiimaha_iska_iibinta
         faa_iido_or_khasaaro = qiimaha_iska_iibinta - qiimaha_soo_iibsiga
         if faa_iido_or_khasaaro > 0:
             results["faa'iido"] = faa_iido_or_khasaaro
             results["faa'iidada % "] = (faa_iido_or_khasaaro / qiimaha_soo_iibsiga) * 100
         elif faa_iido_or_khasaaro < 0:
             results["khasaaro"] = -faa_iido_or_khasaaro
-            results["khasaaro % :"] = (-faa_iido_or_khasaaro / qiimaha_soo_iibsiga) * 100
+            results["khasaaro_percent"] = (-faa_iido_or_khasaaro / qiimaha_soo_iibsiga) * 100
 
     # Calculate net profit
     if dakhliga and kharashaadka:

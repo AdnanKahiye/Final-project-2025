@@ -24,7 +24,7 @@ def save_financial_data(extracted_text, extracted_data):
     faa_iido = extracted_data.get("faa'iido")
     faa_iidada_percent = extracted_data.get("faa'iidada %")
     khasaaro = extracted_data.get("khasaaro")
-    khasaaro_percent = extracted_data.get("khasaaro %")
+    khasaaro_percent = extracted_data.get("khasaaro_percent")
     dakhliga_hadda = extracted_data.get("dakhliga hadda")
 
     # Mark as incomplete if any key financial data is missing
@@ -127,7 +127,7 @@ def home(request):
                 return render(request, "finance/home.html", {"error": "This is not financial data. Please enter financial details."})
 
             # Save extracted text and financial data in database
-            saved_financial = save_financial_data(extracted_text, financials)
+            saved_financial = save_financial_data(extracted_text, metrics)
 
             return render(request, "finance/results.html", {
                 "financials": financials,

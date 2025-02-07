@@ -4,41 +4,63 @@
 
 {% block content %}
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>Text Input</th>
-            <th>Tirada</th>
-            <th>Soo Iibsiga</th>
-            <th>Iska Iibinta</th>
-            <th>Kharashaadka</th>
-            <th>Dakhliga</th>
-            <th>Faa'iido</th>
-            <th>Faa'iido %</th>
-            <th>Khasaaro</th>
-            <th>Khasaaro %</th>
-            <th>Dakhliga Hadda</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for data in financial_data %}
-        <tr>
-            <td title="{{ data.text_input }}">
-                {{ data.text_input|truncatewords:4 }}  <!-- Show first 5 words -->
-            </td>
-            <td>{{ data.tirada }}</td>
-            <td>{{ data.qiimaha_soo_iibsiga }}</td>
-            <td>{{ data.qiimaha_iska_iibinta }}</td>
-            <td>{{ data.kharashaadka }}</td>
-            <td>{{ data.dakhliga }}</td>
-            <td>{{ data.faa_iido }}</td>
-            <td>{{ data.faa_iidada_percent }}</td>
-            <td>{{ data.khasaaro }}</td>
-            <td>{{ data.khasaaro_percent }}</td>
-            <td>{{ data.dakhliga_hadda }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Extract Financial Metrics</h1>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300 rounded-lg shadow-md">
+            <thead class="bg-gray-100">
+                <tr class="text-gray-700 uppercase text-sm leading-normal">
+                    <th class="py-3 px-4 text-left">Text</th>
+                    <th class="py-3 px-4 text-center">Qty</th>
+                    <th class="py-3 px-4 text-center">Buying</th>
+                    <th class="py-3 px-4 text-center">Selling</th>
+                    <th class="py-3 px-4 text-center">Expense</th>
+                    <th class="py-3 px-4 text-center">Income</th>
+                    <th class="py-3 px-4 text-center">Profit</th>
+                    <th class="py-3 px-4 text-center">Profit %</th>
+                    <th class="py-3 px-4 text-center">Loss</th>
+                    <th class="py-3 px-4 text-center">Loss %</th>
+                    <th class="py-3 px-4 text-center">Income Now</th>
+                    <th class="py-3 px-4 text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm">
+                {% for data in financial_data %}
+                <tr class="border-b border-gray-300 hover:bg-gray-50 transition">
+                    <td class="py-2 px-4 text-left truncate" title="{{ data.text_input }}">
+                        {{ data.text_input|truncatewords:4 }}
+                    </td>
+                    <td class="py-2 px-4 text-center">{{ data.tirada }}</td>
+                    <td class="py-2 px-4 text-center">{{ data.qiimaha_soo_iibsiga }}</td>
+                    <td class="py-2 px-4 text-center">{{ data.qiimaha_iska_iibinta }}</td>
+                    <td class="py-2 px-4 text-center">{{ data.kharashaadka }}</td>
+                    <td class="py-2 px-4 text-center">{{ data.dakhliga }}</td>
+                    <td class="py-2 px-4 text-center font-semibold text-green-600">{{ data.faa_iido }}</td>
+                    <td class="py-2 px-4 text-center font-semibold text-green-600">{{ data.faa_iidada_percent }}%</td>
+                    <td class="py-2 px-4 text-center font-semibold text-red-600">{{ data.khasaaro }}</td>
+                    <td class="py-2 px-4 text-center font-semibold text-red-600">{{ data.khasaaro_percent }}%</td>
+                    <td class="py-2 px-4 text-center">{{ data.dakhliga_hadda }}</td>
+                    <td class="py-2 px-4 text-center">
+                        <a href="#" 
+                        class="text-blue-500 hover:text-blue-700 font-semibold transition duration-200">
+                         ✏️ Edit
+                     </a>
+                 
+                     <!-- Delete Link (With Confirmation) -->
+                     <a href="#" 
+                        onclick="return confirm('Are you sure you want to delete this item?');"
+                        class="text-red-500 hover:text-red-700 font-semibold transition duration-200">
+                         ❌ Delete
+                     </a>
+                        
+                    </td>
+                </tr>
+               
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}
