@@ -159,19 +159,86 @@ def incomplete_financial_data(request):
 
 def edit_financial_data(request, pk):
     """
-    Allow users to edit and update financial data.
+    Allow users to edit and update financial data with re-extraction and recalculation.
     """
     data = get_object_or_404(FinancialData, pk=pk)
+
     if request.method == "POST":
         form = FinancialDataForm(request.POST, instance=data)
+        
         if form.is_valid():
-            form.save()
+            financial_data = form.save(commit=False)  # Don't save immediately
+            
+            # Extract updated financial data
+            extracted_financials = extract_financials(financial_data.text_input)
+            calculated_metrics = calculate_metrics(extracted_financials)
+
+            # Update relevant fields with new extracted values
+            financial_data.tirada = extracted_financials.get("tirada", 1)
+            financial_data.qiimaha_soo_iibsiga = extracted_financials.get("qiimaha_soo_iibsiga", 0)
+            financial_data.qiimaha_iska_iibinta = extracted_financials.get("qiimaha_iska_iibinta", 0)
+            financial_data.kharashaadka = extracted_financials.get("kharashaadka", 0)
+            financial_data.dakhliga = extracted_financials.get("dakhliga", 0)
+            financial_data.faa_iido = extracted_financials.get("faa'iido", 0)
+            financial_data.faa_iidada_percent = extracted_financials.get("faa'iidada %", 0)
+            financial_data.khasaaro = extracted_financials.get("khasaaro", 0)
+            financial_data.khasaaro_percent = extracted_financials.get("khasaaro_percent", 0)
+            financial_data.dakhliga_hadda = extracted_financials.get("dakhliga hadda", 0)
+
+            # Determine completeness based on required fields
+            financial_data.is_complete = all([
+                financial_data.qiimaha_soo_iibsiga, 
+                financial_data.qiimaha_iska_iibinta, 
+                financial_data.dakhliga
+            ])
+
+            financial_data.save()  # Save after updating fields
+
+            messages.success(request, "Financial data updated successfully.")
             return redirect("financial_data_list")
+
     else:
         form = FinancialDataForm(instance=data)
+
     return render(request, "finance/edit_financial_data.html", {"form": form})
+
+
+
+
+def delete_financial_data(request, pk):
+    """
+    Delete a financial data entry.
+    """
+    data = get_object_or_404(FinancialData, pk=pk)
+    data.delete()
+    messages.success(request, "Financial data deleted successfully.")
+    return redirect("financial_data_list")  # Redirect back to the list page
 
 
 def financial_data_list(request):
     financial_data = FinancialData.objects.all()
     return render(request, "finance/financial_data_list.html", {"financial_data": financial_data})
+
+from django.shortcuts import render
+from .models import FinancialData
+
+def dashboard(request):
+    """
+    Display the main dashboard with financial summaries.
+    """
+    financial_data = FinancialData.objects.all()
+
+    # Calculate totals
+    total_income = sum(data.dakhliga for data in financial_data)
+    total_expense = sum(data.kharashaadka for data in financial_data)
+    total_profit = total_income - total_expense
+
+    # Fetch recent financial data
+    recent_financial_data = financial_data.order_by('-id')[:5]  # Show last 5 entries
+
+    return render(request, 'finance/dashboard.html', {
+        'total_income': total_income,
+        'total_expense': total_expense,
+        'total_profit': total_profit,
+        'recent_financial_data': recent_financial_data
+    })

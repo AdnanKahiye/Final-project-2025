@@ -1,0 +1,85 @@
+{% extends 'finance/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <div class="w-64 bg-white shadow-lg p-5">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">📊 Dashboard</h2>
+        <ul class="space-y-4">
+            <li><a href="{% url 'financial_data_list' %}" class="block text-gray-700 hover:text-blue-500">📂 View Financial Data</a></li>
+            <li><a href="{% url 'incomplete_financial_data' %}" class="block text-gray-700 hover:text-yellow-500">⚠️ Incomplete Data</a></li>
+            <li><a href="{% url 'home' %}" class="block text-gray-700 hover:text-green-500">🏠 Home</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+        <!-- Top Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Welcome to Your Dashboard</h1>
+            <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-700 font-semibold">🚪 Logout</a>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold text-gray-700">💰 Total Income</h2>
+                <p class="text-2xl font-bold text-green-500">${{ total_income }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold text-gray-700">📉 Total Expenses</h2>
+                <p class="text-2xl font-bold text-red-500">${{ total_expense }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold text-gray-700">📊 Profit / Loss</h2>
+                <p class="text-2xl font-bold {% if total_profit >= 0 %}text-green-500{% else %}text-red-500{% endif %}">
+                    ${{ total_profit }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Financial Data Table -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Financial Entries</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300 rounded-lg">
+                    <thead class="bg-gray-100">
+                        <tr class="text-gray-700 uppercase text-sm leading-normal">
+                            <th class="py-3 px-4 text-left">Text</th>
+                            <th class="py-3 px-4 text-center">Income</th>
+                            <th class="py-3 px-4 text-center">Expense</th>
+                            <th class="py-3 px-4 text-center">Profit</th>
+                            <th class="py-3 px-4 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm">
+                        {% for data in recent_financial_data %}
+                        <tr class="border-b border-gray-300 hover:bg-gray-50 transition">
+                            <td class="py-2 px-4 text-left truncate" title="{{ data.text_input }}">
+                                {{ data.text_input|truncatewords:5 }}
+                            </td>
+                            <td class="py-2 px-4 text-center text-green-600">${{ data.dakhliga }}</td>
+                            <td class="py-2 px-4 text-center text-red-600">${{ data.kharashaadka }}</td>
+                            <td class="py-2 px-4 text-center {% if data.faa_iido >= 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                                ${{ data.faa_iido }}
+                            </td>
+                            <td class="py-2 px-4 text-center">
+                                <a href="{% url 'edit_financial_data' data.id %}" class="text-blue-500 hover:text-blue-700">✏️ Edit</a>
+                                <a href="{% url 'delete_financial_data' data.id %}" onclick="return confirm('Are you sure?');" class="text-red-500 hover:text-red-700">❌ Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="py-3 text-center text-gray-500">No financial data available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

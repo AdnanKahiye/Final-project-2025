@@ -1,23 +1,54 @@
-<h2>Incomplete Financial Data</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Text Input</th>
-            <th>Qiimaha Soo Iibsiga</th>
-            <th>Qiimaha Iska Iibinta</th>
-            <th>Dakhliga</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for data in incomplete_data %}
-        <tr>
-            <td>{{ data.text_input }}</td>
-            <td>{{ data.qiimaha_soo_iibsiga }}</td>
-            <td>{{ data.qiimaha_iska_iibinta }}</td>
-            <td>{{ data.dakhliga }}</td>
-            <td><a href="{% url 'edit_financial_data' data.id %}">Edit</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% extends 'finance/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Incomplete Financial Data{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <!-- Page Title -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">⚠️ Incomplete Financial Data</h1>
+
+    <!-- Table Container -->
+    <div class="overflow-x-auto bg-white shadow-lg rounded-lg p-6">
+        <table class="min-w-full border border-gray-300 rounded-lg">
+            <thead class="bg-gray-100 text-gray-700 uppercase text-sm">
+                <tr>
+                    <th class="py-3 px-4 text-left">📄 Text Input</th>
+                    <th class="py-3 px-4 text-center">💰 Buying Price</th>
+                    <th class="py-3 px-4 text-center">💵 Selling Price</th>
+                    <th class="py-3 px-4 text-center">📈 Income</th>
+                    <th class="py-3 px-4 text-center">✏️ Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm">
+                {% for data in incomplete_data %}
+                <tr class="border-b border-gray-300 hover:bg-gray-50 transition">
+                    <td class="py-2 px-4 text-left truncate" title="{{ data.text_input }}">
+                        {{ data.text_input|truncatewords:6 }}
+                    </td>
+                    <td class="py-2 px-4 text-center text-red-600 font-semibold">
+                        ${{ data.qiimaha_soo_iibsiga|default:"-" }}
+                    </td>
+                    <td class="py-2 px-4 text-center text-green-600 font-semibold">
+                        ${{ data.qiimaha_iska_iibinta|default:"-" }}
+                    </td>
+                    <td class="py-2 px-4 text-center text-blue-600 font-semibold">
+                        ${{ data.dakhliga|default:"-" }}
+                    </td>
+                    <td class="py-2 px-4 text-center">
+                        <a href="{% url 'edit_financial_data' data.id %}" 
+                           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition duration-200">
+                           ✏️ Edit
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="py-3 text-center text-gray-500">✅ No incomplete financial data found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
