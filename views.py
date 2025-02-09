@@ -130,7 +130,6 @@ def home(request):
             saved_financial = save_financial_data(extracted_text, metrics)
 
             return render(request, "finance/results.html", {
-                "financials": financials,
                 "metrics": metrics,
                 "saved_financial_id": saved_financial.id  # Pass saved record ID for editing
             })

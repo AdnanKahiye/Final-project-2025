@@ -20,17 +20,13 @@
         <!-- Tabs Content -->
         <div class="mt-6" id="financialTabsContent">
             <div class="tab-content block" id="status">
-                <h2 class="text-xl font-semibold mb-4">Status</h2>
-                <ul class="divide-y divide-gray-200">
-                    {% for key, value in financials.items %}
-                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
-                    {% endfor %}
-                </ul>
+                <h2 class="text-xl font-semibold mb-4">All</h2>
 
-                <h2 class="mt-6 text-xl font-semibold">Calculated Metrics</h2>
                 <ul class="divide-y divide-gray-200">
                     {% for key, value in metrics.items %}
-                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+                        <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+                    {% empty %}
+                        <p class="text-gray-600">No metrics calculated.</p>
                     {% endfor %}
                 </ul>
             </div>
@@ -38,39 +34,56 @@
             <div class="tab-content hidden" id="revenue">
                 <h2 class="text-xl font-semibold mb-4">Revenue</h2>
                 <ul class="divide-y divide-gray-200">
-                    {% for key, value in financials.revenue.items %}
-                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
-                    {% endfor %}
+                    {% if metrics.dakhliga is not None %}
+                        <li class="py-2"><strong>Dakhliga:</strong> {{ metrics.dakhliga }}</li>
+                    {% else %}
+                        <p class="text-gray-600">No revenue data available.</p>
+                    {% endif %}
                 </ul>
             </div>
+            
+            
 
             <div class="tab-content hidden" id="expenses">
                 <h2 class="text-xl font-semibold mb-4">Expenses</h2>
                 <ul class="divide-y divide-gray-200">
-                    {% if financials.kharashaadka %}
-                        <li class="py-2"><strong>{{ "kharashaadka"|capfirst }}:</strong> {{ financials.kharashaadka }}</li>
+                    {% if metrics.kharashaadka is not None %}
+                        <li class="py-2"><strong>Kharashaadka:</strong> {{ metrics.kharashaadka }}</li>
+                    {% else %}
+                        <p class="text-gray-600">No expense data available.</p>
                     {% endif %}
                 </ul>
             </div>
+            
 
             <div class="tab-content hidden" id="buy">
                 <h2 class="text-xl font-semibold mb-4">Buy</h2>
                 <ul class="divide-y divide-gray-200">
-                    {% for key, value in financials.buy.items %}
-                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
-                    {% endfor %}
+                    {% if metrics.qiimaha_soo_iibsiga is not None %}
+                        <li class="py-2"><strong>Qiimaha Soo Iibsiga:</strong> {{ metrics.qiimaha_soo_iibsiga }}</li>
+                    {% else %}
+                        <p class="text-gray-600">No buy data available.</p>
+                    {% endif %}
                 </ul>
             </div>
+            
 
             <div class="tab-content hidden" id="sell">
                 <h2 class="text-xl font-semibold mb-4">Sell</h2>
                 <ul class="divide-y divide-gray-200">
-                    {% for key, value in financials.sell.items %}
-                    <li class="py-2"><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
-                    {% endfor %}
+                    {% if metrics.qiimaha_iska_iibinta is not None %}
+                        <li class="py-2"><strong>Qiimaha Iska Iibinta:</strong> {{ metrics.qiimaha_iska_iibinta }}</li>
+                    {% else %}
+                        <p class="text-gray-600">No sell data available.</p>
+                    {% endif %}
                 </ul>
             </div>
-        </div>
+            
+           <!-- 🔹 ADD "Edit" BUTTON -->
+           <a href="{% url 'edit_financial_data' saved_financial_id %}" 
+           class="mt-6 inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+           Edit Financial Data
+        </a>
 
         <a href="{% url 'home' %}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Go Back</a>
     </div>

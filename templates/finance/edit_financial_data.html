@@ -1,6 +1,38 @@
-<h2>Edit Financial Data</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
+{% extends 'finance/base.html' %}
+{% load static %}
+
+{% block title %}Edit Financial Data{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg">
+    <!-- Header -->
+    <h2 class="text-4xl font-extrabold text-gray-800 text-center mb-6">Edit Financial Data</h2>
+    <p class="text-gray-600 text-center mb-6">
+        Modify your financial data below and save the changes.
+    </p>
+
+    <!-- Form -->
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+            {{ form.as_p }}
+        </div>
+
+        <!-- Button Section -->
+        <div class="flex justify-center space-x-4">
+            <!-- Save Button -->
+            <button type="submit"
+                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold shadow-md transition duration-200 transform hover:scale-105">
+                Save Changes
+            </button>
+
+            <!-- Cancel Button -->
+            <a href="{% url 'financial_data_list' %}" 
+            class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition duration-200">
+            Cancel
+         </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
