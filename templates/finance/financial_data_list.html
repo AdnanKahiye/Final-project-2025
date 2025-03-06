@@ -21,7 +21,6 @@
                     <th class="py-3 px-4 text-center">Profit %</th>
                     <th class="py-3 px-4 text-center">Loss</th>
                     <th class="py-3 px-4 text-center">Loss %</th>
-                    <th class="py-3 px-4 text-center">Income Now</th>
                     <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
             </thead>
@@ -40,7 +39,6 @@
                     <td class="py-2 px-4 text-center font-semibold text-green-600">{{ data.faa_iidada_percent }}%</td>
                     <td class="py-2 px-4 text-center font-semibold text-red-600">{{ data.khasaaro }}</td>
                     <td class="py-2 px-4 text-center font-semibold text-red-600">{{ data.khasaaro_percent }}%</td>
-                    <td class="py-2 px-4 text-center">{{ data.dakhliga_hadda }}</td>
                     <td class="py-2 px-4 text-center">
                         <a href="{% url 'edit_financial_data' data.id %}" 
                         class="text-blue-500 hover:text-blue-700 font-semibold transition duration-200">

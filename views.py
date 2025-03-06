@@ -76,66 +76,64 @@ def register(request):
 
 
 
-@login_required(login_url='login') 
 
 def home(request):
     if request.method == "POST":
-        extracted_text = None
-
-        # Handle Text Input
+        extracted_text, error = None, None
+        
         if "financial_text" in request.POST:
             financial_text = request.POST.get("financial_text", "").strip()
             if not financial_text:
                 return render(request, "finance/home.html", {"error": "Please enter financial details to extract."})
             extracted_text = financial_text
-
-        # Handle PDF Upload
+        
         elif "pdf_upload" in request.FILES:
-            pdf_file = request.FILES["pdf_upload"]
+            pdf_file = request.FILES.get("pdf_upload")
             if not pdf_file:
                 return render(request, "finance/home.html", {"error": "Please upload a PDF file."})
-
+            
             file_path = default_storage.save(f"temp/{pdf_file.name}", pdf_file)
             full_path = os.path.join(settings.MEDIA_ROOT, file_path)
-
+            
             try:
                 extracted_text = extract_text_from_pdf(full_path)
             finally:
                 default_storage.delete(file_path)
-
-        # Handle Image Upload
+        
         elif "image_upload" in request.FILES:
-            image_file = request.FILES["image_upload"]
+            image_file = request.FILES.get("image_upload")
             if not image_file:
                 return render(request, "finance/home.html", {"error": "Please upload an image file."})
-
+            
             file_path = default_storage.save(f"temp/{image_file.name}", image_file)
             full_path = os.path.join(settings.MEDIA_ROOT, file_path)
-
+            
             try:
                 extracted_text = extract_text_from_image(full_path)
             finally:
                 default_storage.delete(file_path)
-
+        
         if extracted_text:
-            # Extract financials & calculate metrics
-            financials = extract_financials(extracted_text)
-            metrics = calculate_metrics(financials)
-            print(metrics)
-
-            # 🔥 Check if extracted financial data is empty or contains no financial values
-            if not any(financials.values()) or all(value == 1 or value is None for value in financials.values()):
-                return render(request, "finance/home.html", {"error": "This is not financial data. Please enter financial details."})
-
-            # Save extracted text and financial data in database
-            saved_financial = save_financial_data(extracted_text, metrics)
-
-            return render(request, "finance/results.html", {
-                "metrics": metrics,
-                "saved_financial_id": saved_financial.id  # Pass saved record ID for editing
-            })
-
+            return result(request, extracted_text)
+    
     return render(request, "finance/home.html")
+
+
+@login_required(login_url='login') 
+def result(request, extracted_text):
+    financials = extract_financials(extracted_text)
+    metrics = calculate_metrics(financials)
+    
+    if not any(financials.values()) or all(value == 1 or value is None for value in financials.values()):
+        return render(request, "finance/home.html", {"error": "This is not financial data. Please enter financial details."})
+    
+    saved_financial = save_financial_data(extracted_text, metrics)
+    
+    return render(request, "finance/results.html", {
+        "metrics": metrics,
+        "saved_financial_id": saved_financial.id
+    })
+
 
 
 # About view
