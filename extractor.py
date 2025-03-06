@@ -134,7 +134,13 @@ def calculate_metrics(financials):
 
     results = {}
     results['tirada']=tirada
-
+    results['qiimaha_soo_iibsiga']=qiimaha_soo_iibsiga
+    results['qiimaha_iska_iibinta']=qiimaha_iska_iibinta
+    results['kharashaadka']=kharashaadka
+    results['dakhliga']=dakhliga
+    results['faa_iidada']=faa_iidada
+    
+    
     # Calculate profit from profit margin
     if faa_iidada and dakhliga:
         faa_iido = dakhliga * (faa_iidada / 100)  # Convert percentage to decimal

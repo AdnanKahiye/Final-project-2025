@@ -121,6 +121,7 @@ def home(request):
             # Extract financials & calculate metrics
             financials = extract_financials(extracted_text)
             metrics = calculate_metrics(financials)
+            print(metrics)
 
             # 🔥 Check if extracted financial data is empty or contains no financial values
             if not any(financials.values()) or all(value == 1 or value is None for value in financials.values()):
@@ -174,16 +175,16 @@ def edit_financial_data(request, pk):
             calculated_metrics = calculate_metrics(extracted_financials)
 
             # Update relevant fields with new extracted values
-            financial_data.tirada = extracted_financials.get("tirada", 1)
-            financial_data.qiimaha_soo_iibsiga = extracted_financials.get("qiimaha_soo_iibsiga", 0)
-            financial_data.qiimaha_iska_iibinta = extracted_financials.get("qiimaha_iska_iibinta", 0)
-            financial_data.kharashaadka = extracted_financials.get("kharashaadka", 0)
-            financial_data.dakhliga = extracted_financials.get("dakhliga", 0)
-            financial_data.faa_iido = extracted_financials.get("faa'iido", 0)
-            financial_data.faa_iidada_percent = extracted_financials.get("faa'iidada %", 0)
-            financial_data.khasaaro = extracted_financials.get("khasaaro", 0)
-            financial_data.khasaaro_percent = extracted_financials.get("khasaaro_percent", 0)
-            financial_data.dakhliga_hadda = extracted_financials.get("dakhliga hadda", 0)
+            financial_data.tirada = calculated_metrics.get("tirada", 1)
+            financial_data.qiimaha_soo_iibsiga = calculated_metrics.get("qiimaha_soo_iibsiga", 0)
+            financial_data.qiimaha_iska_iibinta = calculated_metrics.get("qiimaha_iska_iibinta", 0)
+            financial_data.kharashaadka = calculated_metrics.get("kharashaadka", 0)
+            financial_data.dakhliga = calculated_metrics.get("dakhliga", 0)
+            financial_data.faa_iido = calculated_metrics.get("faa'iido", 0)
+            financial_data.faa_iidada_percent = calculated_metrics.get("faa'iidada %", 0)
+            financial_data.khasaaro = calculated_metrics.get("khasaaro", 0)
+            financial_data.khasaaro_percent = calculated_metrics.get("khasaaro_percent", 0)
+            financial_data.dakhliga_hadda = calculated_metrics.get("dakhliga hadda", 0)
 
             # Determine completeness based on required fields
             financial_data.is_complete = all([
