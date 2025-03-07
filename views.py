@@ -221,6 +221,7 @@ def financial_data_list(request):
 from django.shortcuts import render
 from .models import FinancialData
 
+@login_required(login_url='login') 
 def dashboard(request):
     """
     Display the main dashboard with financial summaries.

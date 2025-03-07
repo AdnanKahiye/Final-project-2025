@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FinancialData
+from .models import FinancialData 
 
 # Register your models here.
 admin.site.register(FinancialData)

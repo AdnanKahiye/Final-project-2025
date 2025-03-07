@@ -139,6 +139,7 @@ def calculate_metrics(financials):
     results['kharashaadka']=kharashaadka
     results['dakhliga']=dakhliga
     results['faa_iidada']=faa_iidada
+    results['khasaaradda'] =khasaaradda
     
     
     # Calculate profit from profit margin
@@ -149,6 +150,7 @@ def calculate_metrics(financials):
 
     # Calculate profit or loss from buying and selling price
     if qiimaha_soo_iibsiga and qiimaha_iska_iibinta:
+        #tirada haddii 
         results['kharashaadka'] =qiimaha_soo_iibsiga*tirada
         results['dakhliga'] =qiimaha_iska_iibinta*tirada
         results['qiimaha_soo_iibsiga'] =qiimaha_soo_iibsiga
@@ -165,5 +167,6 @@ def calculate_metrics(financials):
     if dakhliga and kharashaadka:
         dakhliga_nadiif = dakhliga - kharashaadka
         results["dakhliga hadda :"] = dakhliga_nadiif
+        results['kharashaadka'] =kharashaadka
 
     return results
